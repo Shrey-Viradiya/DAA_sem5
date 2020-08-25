@@ -86,7 +86,7 @@ void insert_edge(int start, int end, int weight){
 struct edge get_min(){
     heapSort(priority_queue, right - left + 1);
 
-    while (left < right){
+    while (left <= right){
         struct edge temp = priority_queue[left];
         left ++;
         if ( mst_nodes[temp.start] && mst_nodes[temp.end] ){
@@ -125,6 +125,7 @@ void print_graph(){
 
 int main(){
 
+    printf("MST for connected graph: \n");
     get_graph();
 
     // no of edges
