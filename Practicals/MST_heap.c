@@ -33,11 +33,11 @@ void heapify(struct edge *arr, int n, int i)
     int l = 2*i + 1; // left = 2*i + 1 
     int r = 2*i + 2; // right = 2*i + 2 
   
-    // If left child is smaller than root 
+    // If left child has higher weight than largest 
     if (l < n && arr[left + l].weight > arr[left + largest].weight) 
         largest = l; 
   
-    // If right child is smaller than largest so far 
+    // If right child has higher weight than largest so far 
     if (r < n && arr[left + r].weight >  arr[left + largest].weight) 
         largest = r; 
   
