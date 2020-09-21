@@ -69,8 +69,6 @@ node_t *heap_merge(heap_t *heap1, heap_t *heap2){
 
 node_t *heap_union(heap_t *original, heap_t *new){
 
-    // algorithm at http://staff.ustc.edu.cn/~csli/graduate/algorithms/book6/chap20.htm
-    // https://gist.github.com/chinchila/81a4c9bfd852e775f2bdf68339d212a2
     node_t *new_head = heap_merge( original, new );
 
     original = NULL;
