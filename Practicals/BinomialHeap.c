@@ -122,6 +122,52 @@ node_t *heap_union(heap_t *original, heap_t *new){
 
 }
 
+void heap_remove( heap_t *heap, node_t *head, node_t *bef ){
+    if( head == heap->head )
+		heap->head = head->brother;
+	else
+		bef->brother = head->brother;
+
+    node_t *new_head = NULL;
+    node_t *child = head->child;
+
+    while (child != NULL)
+    {
+        node_t *next = child->brother;
+        child->brother = new_head;
+        child->parent = NULL;
+        new_head = child;
+        child = next;
+    }
+
+    heap_t *temp= create_head();
+    temp->head = new_head;
+    heap->head = heap_union( heap, temp );
+	free( temp );    
+}
+
+node_t *heap_min(heap_t *heap){
+    if(heap->head == NULL) return NULL;
+
+    node_t *min = heap->head;
+    node_t *min_prev = NULL;
+    node_t *next = min->brother;
+    node_t *next_prev = min;
+
+    while( next != NULL){
+        if (next -> value < min->value){
+            min = next;
+            min_prev = next_prev;
+        }
+
+        next_prev = next;
+        next = next->brother;
+    }
+
+    heap_remove(heap, min, min_prev);
+    return min;
+}
+
 
 void insert_in_heap( heap_t *heap, int value )
 {
@@ -133,21 +179,56 @@ void insert_in_heap( heap_t *heap, int value )
     printf("Done\n");
 }
 
+void heap_free( heap_t *h )
+{
+	while( heap_min( h ) );
+	free( h );
+}
+
 
 int main(){
     heap_t *heap = create_head();
     
     // take user input and create insert into heap
     int n;
-    printf("Enter the number of elements: \n");
-    scanf("%d",&n);
+    
+    printf("\n1: Insert element");
+    printf("\n2: Remove minimum");
+    printf("\n0: Exit");
+    printf("\n==================");
+    
+    while (1)
+    {
+        int a;
+        printf("\nEnter Your choice: ");
+        scanf("%d", &a);
 
-    printf("Start entering numbers to insert into binomail heap:");
-    for (int i; i<n;i++){
-        int value;
-        scanf("%d",&value);
-        insert_in_heap(heap, value);
+        switch (a)
+        {
+        case 0:
+            printf("\nExiting!\n");
+            heap_free( heap );
+            return 0;
+        
+        case 1:
+            printf("\nEnter the integer to input: ");
+            int temp;
+            scanf("%d", &temp);
+            insert_in_heap(heap, temp);
+            break;
+
+        case 2:
+            printf("\nMinimum Element: ");
+            node_t *min = heap_min( heap );
+            if( min != NULL ) printf( "%d\n", min->value );
+            break;
+
+        default:
+            printf("\nEnter Correct Option: ");
+            break;
+        }
     }
+    
     
     return 0;
 }
