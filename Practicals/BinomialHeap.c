@@ -18,6 +18,9 @@ node_t *create_node( int value )
 	node_t *node = malloc( sizeof ( node_t ) );
 	node->value = value;
 	node->degree = 0;
+    node->brother = NULL;
+    node->parent = NULL;
+    node->child = NULL;
 	return node;
 }
 
@@ -47,7 +50,7 @@ node_t *heap_merge(heap_t *heap1, heap_t *heap2){
     }
     tail = head;
 
-    while(h1_iter == NULL || h2_iter == NULL){
+    while(h1_iter != NULL && h2_iter != NULL){
         if(h1_iter->degree <= h2_iter->degree){
             tail->brother = h1_iter;
             h1_iter = h1_iter->brother;
@@ -86,7 +89,36 @@ node_t *heap_union(heap_t *original, heap_t *new){
             prev = x;
 			x = next;
         }
-    }
+        else
+		{
+            if( x->value < next->value )
+			{
+				x->brother = next->brother;
+				next->parent = x;
+				next->brother = x->child;
+				x->child = next;
+				x->degree++;
+			}
+			else
+			{
+				if( prev == NULL )
+					new_head = next;
+				else
+					prev->brother = next;
+
+				x->parent = next;
+				x->brother = next->child;
+				next->child = x;
+				next->degree++;
+
+				x = next;
+			}
+		}
+
+		next = x->brother;
+        }
+
+	return new_head;
 
 }
 
@@ -98,6 +130,7 @@ void insert_in_heap( heap_t *heap, int value )
 	temp->head = node;
 	heap->head = heap_union( heap, temp );
 	free( temp );
+    printf("Done\n");
 }
 
 
@@ -112,6 +145,7 @@ int main(){
     printf("Start entering numbers to insert into binomail heap:");
     for (int i; i<n;i++){
         int value;
+        scanf("%d",&value);
         insert_in_heap(heap, value);
     }
     
