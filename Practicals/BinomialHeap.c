@@ -183,6 +183,64 @@ void heap_free( heap_t *h )
 	free( h );
 }
 
+struct node_t* find_node(struct node_t* heap, int k) {
+    struct node_t* x = heap;
+    struct node_t* found = NULL;
+    if (x->value == k) {
+        found = x;
+        return found;
+    }
+    if (x->child != NULL && found == NULL) {
+        found = find_node(x->child, k);
+    }
+ 
+    if (x->brother != NULL && found == NULL) {
+        found = find_node(x->brother, k);
+    }
+    return found;
+}
+
+int heap_decrease_key(struct heap_t* H, int i, int k) {
+    int temp;
+    struct node_t* p;
+    struct node_t* y;
+    struct node_t* z;
+    p = find_node(H->head, i);
+    if (p == NULL) {
+        printf("\nInvalid Key");
+        return 0;
+    }
+    if (k > p->value) {
+        printf("\nNew Key is greater than available one.");
+        return 0;
+    }
+    p->value = k;
+    y = p;
+    z = p->parent;
+    while (z != NULL && y->value < z->value) {
+        temp = y->value;
+        y->value = z->value;
+        z->value = temp;
+        y = z;
+        z = z->parent;
+    }
+    printf("\nKEY REDUCED SUCCESSFULLY!");
+}
+
+int delete_node(struct heap_t* H, int k) {
+    struct node_t* np;
+    if (H->head == NULL) {
+        printf("\nHEAP EMPTY");
+        return 0;
+    }
+ 
+    heap_decrease_key(H, k, -1000);
+    np = heap_min(H);
+    if (np != NULL)
+        printf("\nNODE DELETED SUCCESSFULLY");
+    return 0;
+}
+
 
 int main(){
     heap_t *heap = create_head();
@@ -191,7 +249,8 @@ int main(){
     int n;
     
     printf("\n1: Insert element");
-    printf("\n2: Remove minimum");
+    printf("\n2: Extract minimum");
+    printf("\n3. Delete a node");
     printf("\n0: Exit");
     printf("\n==================");
     
@@ -219,6 +278,13 @@ int main(){
             printf("\nMinimum Element: ");
             node_t *min = heap_min( heap );
             if( min != NULL ) printf( "%d\n", min->value );
+            break;
+
+        case 3:
+            printf("\nDelete the node: ");
+            int abc;
+            scanf("%d",&abc);
+            delete_node(heap, abc);
             break;
 
         default:
