@@ -40,6 +40,7 @@ node_t *heap_merge(heap_t *heap1, heap_t *heap2){
     node_t *h2_iter = heap2->head;
     node_t *tail;
 
+    // start with checking the degrees
     if (heap1->head->degree <= heap2->head->degree){
         head = heap1->head;
         h1_iter = h1_iter->brother;
@@ -50,6 +51,7 @@ node_t *heap_merge(heap_t *heap1, heap_t *heap2){
     }
     tail = head;
 
+    // iterate over heaps and join with comparing degrees
     while(h1_iter != NULL && h2_iter != NULL){
         if(h1_iter->degree <= h2_iter->degree){
             tail->brother = h1_iter;
@@ -69,6 +71,7 @@ node_t *heap_merge(heap_t *heap1, heap_t *heap2){
 
 node_t *heap_union(heap_t *original, heap_t *new){
 
+    // merge both heaps
     node_t *new_head = heap_merge( original, new );
 
     original = NULL;
@@ -82,7 +85,9 @@ node_t *heap_union(heap_t *original, heap_t *new){
     node_t *x = new_head;
     node_t *next = new_head->brother;
 
+    
     while( next != NULL){
+        // check with degrees and change connection making a new heap
         if((x->degree != next->degree) || (next->brother!=NULL && (next->brother->degree == x->degree))){
             prev = x;
 			x = next;
@@ -129,6 +134,7 @@ void heap_remove( heap_t *heap, node_t *head, node_t *bef ){
     node_t *new_head = NULL;
     node_t *child = head->child;
 
+    // create new heap of childs of removed node
     while (child != NULL)
     {
         node_t *next = child->brother;
@@ -138,6 +144,7 @@ void heap_remove( heap_t *heap, node_t *head, node_t *bef ){
         child = next;
     }
 
+    // union with old heap
     heap_t *temp= create_head();
     temp->head = new_head;
     heap->head = heap_union( heap, temp );
@@ -152,6 +159,7 @@ node_t *heap_min(heap_t *heap){
     node_t *next = min->brother;
     node_t *next_prev = min;
 
+    // iterate and find the min
     while( next != NULL){
         if (next -> value < min->value){
             min = next;
@@ -162,6 +170,7 @@ node_t *heap_min(heap_t *heap){
         next = next->brother;
     }
 
+    // remove min node with its connection
     heap_remove(heap, min, min_prev);
     return min;
 }
@@ -171,7 +180,10 @@ void insert_in_heap( heap_t *heap, int value )
 {
 	node_t *node = create_node( value );
 	heap_t *temp = create_head();
+    // create temp heap
 	temp->head = node;
+
+    // union with existing heap
 	heap->head = heap_union( heap, temp );
 	free( temp );
     printf("Done\n");
@@ -186,10 +198,14 @@ void heap_free( heap_t *h )
 struct node_t* find_node(struct node_t* heap, int k) {
     struct node_t* x = heap;
     struct node_t* found = NULL;
+
+    // heading is the key
     if (x->value == k) {
         found = x;
         return found;
     }
+
+    // iterate and find the node
     if (x->child != NULL && found == NULL) {
         found = find_node(x->child, k);
     }
@@ -205,7 +221,11 @@ int heap_decrease_key(struct heap_t* H, int i, int k) {
     struct node_t* p;
     struct node_t* y;
     struct node_t* z;
+
+    // find the node with desired key
     p = find_node(H->head, i);
+
+    // check for edge conditions
     if (p == NULL) {
         printf("\nInvalid Key");
         return 0;
@@ -214,6 +234,8 @@ int heap_decrease_key(struct heap_t* H, int i, int k) {
         printf("\nNew Key is greater than available one.");
         return 0;
     }
+
+    // change the values and connections
     p->value = k;
     y = p;
     z = p->parent;
@@ -224,20 +246,23 @@ int heap_decrease_key(struct heap_t* H, int i, int k) {
         y = z;
         z = z->parent;
     }
-    printf("\nKEY REDUCED SUCCESSFULLY!");
+    printf("\nKey Reduced!");
 }
 
 int delete_node(struct heap_t* H, int k) {
     struct node_t* np;
     if (H->head == NULL) {
-        printf("\nHEAP EMPTY");
+        printf("\nEmpty Heap!");
         return 0;
     }
  
+    // Decrease the Node to minimum key
     heap_decrease_key(H, k, -1000);
+
+    //remove element with function
     np = heap_min(H);
     if (np != NULL)
-        printf("\nNODE DELETED SUCCESSFULLY");
+        printf("\nNode Deleted...");
     return 0;
 }
 
