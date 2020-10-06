@@ -32,7 +32,7 @@ void bubble_sort(int arr[], int outer, int inner, int n){
 
     // recurrently calling function to start inner from n again
     // with outer increased
-    if (inner < 0) bubble_sort(arr, outer + 1, n, n);
+    if (inner < outer) bubble_sort(arr, outer + 1, n, n);
     else{
         // Swapping is condition is true
         // reverse the sign for descending sort

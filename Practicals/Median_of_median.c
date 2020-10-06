@@ -133,6 +133,8 @@ int main(){
     }
 
     int k = 5;
+    printf("Enter the k: ");
+    scanf("%d", &k);
 
 
     // calling median of median function
