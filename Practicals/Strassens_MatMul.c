@@ -73,6 +73,96 @@ void strassens_matmul(int **a, int **b, int size, int **ans){
             b22[i]= malloc(reduced_size*sizeof(int));
         }
 
+        // memory allocation to 7 products
+
+        int **p1 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            p1[i]= malloc(reduced_size*sizeof(int));
+        }
+        
+        int **p2 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            p2[i]= malloc(reduced_size*sizeof(int));
+        }
+        
+        int **p3 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            p3[i]= malloc(reduced_size*sizeof(int));
+        }
+        
+        int **p4 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            p4[i]= malloc(reduced_size*sizeof(int));
+        }
+        
+        int **p5 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            p5[i]= malloc(reduced_size*sizeof(int));
+        }
+        
+        int **p6 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            p6[i]= malloc(reduced_size*sizeof(int));
+        }
+        
+        int **p7 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            p7[i]= malloc(reduced_size * sizeof(int));
+        }
+
+        // memory allocation to temp matrix
+        
+        int **temp1 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            temp1[i]= malloc(reduced_size*sizeof(int));
+        }
+
+        int **temp2 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            temp2[i]= malloc(reduced_size*sizeof(int));
+        }
+
+        int **temp3 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            temp3[i]= malloc(reduced_size*sizeof(int));
+        }
+
+        int **temp4 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            temp4[i]= malloc(reduced_size*sizeof(int));
+        }
+
+        int **temp5 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            temp5[i]= malloc(reduced_size*sizeof(int));
+        }
+
+        int **temp6 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            temp6[i]= malloc(reduced_size*sizeof(int));
+        }
+
+        int **temp7 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            temp7[i]= malloc(reduced_size*sizeof(int));
+        }
+
+        int **temp8 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            temp8[i]= malloc(reduced_size*sizeof(int));
+        }
+
+        int **temp9 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            temp9[i]= malloc(reduced_size*sizeof(int));
+        }
+
+        int **temp10 = malloc(reduced_size * sizeof(int *));
+        for(int i=0;i<reduced_size;i++){
+            temp10[i]= malloc(reduced_size*sizeof(int));
+        }
+
+        // Copy Value in small submatrices
         for(int i=0; i<reduced_size; i++){
             for(int j=0; j<reduced_size; j++){
                 a11[i][j]=a[i][j];
@@ -85,113 +175,29 @@ void strassens_matmul(int **a, int **b, int size, int **ans){
                 b22[i][j]=b[i+reduced_size][j+reduced_size];
             }
         }
+        
 
-
-        // memory allocation to 7 products
-        int **p1 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            p1[i]= malloc(reduced_size*sizeof(int));
-        }
-        int **p2 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            p2[i]= malloc(reduced_size*sizeof(int));
-        }
-        int **p3 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            p3[i]= malloc(reduced_size*sizeof(int));
-        }
-        int **p4 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            p4[i]= malloc(reduced_size*sizeof(int));
-        }
-        int **p5 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            p5[i]= malloc(reduced_size*sizeof(int));
-        }
-        int **p6 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            p6[i]= malloc(reduced_size*sizeof(int));
-        }
-        int **p7 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            p7[i]= malloc(reduced_size * sizeof(int));
-        }
-
-
-
-        // compute products from p1 to p7
-        int **temp1 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            temp1[i]= malloc(reduced_size*sizeof(int));
-        }
+        // compute products from p1 to p7      
 
         sub(b12, b22, reduced_size, temp1);
         strassens_matmul(a11, temp1, reduced_size, p1); // p1 = a11(b12 - b22)
-        
-
-        int **temp2 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            temp2[i]= malloc(reduced_size*sizeof(int));
-        }
 
         add(a11, a12, reduced_size, temp2);
         strassens_matmul(temp2, b22, reduced_size, p2); // p2 = (a11 + a12)b22
-        
-
-        int **temp3 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            temp3[i]= malloc(reduced_size*sizeof(int));
-        }
 
         add(a21, a22, reduced_size, temp3);
         strassens_matmul(temp3, b11, reduced_size, p3); // p3 = (a21 + a22)b11
         
-
-        int **temp4 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            temp4[i]= malloc(reduced_size*sizeof(int));
-        }
-
         sub(b21, b11, reduced_size, temp4);
         strassens_matmul(a22, temp4, reduced_size, p4); // p4 = a22(b21 - b11)
-        
-
-        int **temp5 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            temp5[i]= malloc(reduced_size*sizeof(int));
-        }
-        int **temp6 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            temp6[i]= malloc(reduced_size*sizeof(int));
-        }
         
         add(a11, a22, reduced_size, temp5);
         add(b11, b22, reduced_size, temp6);
         strassens_matmul(temp5, temp6, reduced_size, p5); // p5 = (a11 + a22)(b11 + b22)
         
-
-        int **temp7 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            temp7[i]= malloc(reduced_size*sizeof(int));
-        }
-        int **temp8 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            temp8[i]= malloc(reduced_size*sizeof(int));
-        }
-        
         sub(a12, a22, reduced_size, temp7);
         add(b21, b22, reduced_size, temp8);
         strassens_matmul(temp7, temp8, reduced_size, p6); // p6 = (a12 - a22)(b21 + b22)
-        
-
-        int **temp9 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            temp9[i]= malloc(reduced_size*sizeof(int));
-        }
-        int **temp10 = malloc(reduced_size * sizeof(int *));
-        for(int i=0;i<reduced_size;i++){
-            temp10[i]= malloc(reduced_size*sizeof(int));
-        }
         
         sub(a11, a21, reduced_size, temp9);
         add(b11, b12, reduced_size, temp10);
@@ -207,6 +213,8 @@ void strassens_matmul(int **a, int **b, int size, int **ans){
         free(temp8);
         free(temp9);
         free(temp10);
+
+        // other memory allocation
 
         int **t1 = malloc(reduced_size * sizeof(int *));
         for(int i=0;i<reduced_size;i++){
@@ -243,6 +251,8 @@ void strassens_matmul(int **a, int **b, int size, int **ans){
             ans22[i]= malloc(reduced_size*sizeof(int));
         }
 
+        // computing submatrix of ans matrix
+
         add(p5,p6,reduced_size, t1);
         sub(p4,p2,reduced_size, t2);
         add(t1,t2,reduced_size, ans11); // ans11 = p5 + p6 + p4 - p2
@@ -254,6 +264,8 @@ void strassens_matmul(int **a, int **b, int size, int **ans){
         sub(p5, p7, reduced_size, t4);
         add(t3, t4, reduced_size, ans22); // ans22 = p1 + p5 - p7 - p3
 
+
+        // merging the answer
         int a=0;
         int b=0;
         int c=0;   
@@ -302,8 +314,7 @@ void strassens_matmul(int **a, int **b, int size, int **ans){
         free(b22);
         
     }
-    
-    
+        
     return;
 }
 
