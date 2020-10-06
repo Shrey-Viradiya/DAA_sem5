@@ -336,7 +336,7 @@ int main(){
     int **a = malloc(size * sizeof(int *));
     for(int i=0;i<size;i++){
         a[i] = malloc(size*sizeof(int));
-    }   
+    }
     int **b = malloc(size * sizeof(int *));
     for(int i=0;i<size;i++){
         b[i] = malloc(size*sizeof(int));
