@@ -62,6 +62,27 @@ void OptimizeMultiplication(int *arr, int n){
     printf("\nMinimum Cost: %li", m[1][n-1]); 
     printf("\nOptimized Sequence: \n");
     OptimizeSequence(1, n-1, s, matrix);
+
+    printf("\n m \n");
+    for (int i = 1; i < n; i++)
+    {
+        for (int j = i; j < n; j++)
+        {
+            printf("%d ", m[i][j]);
+        }
+        printf("\n");
+    }
+
+    printf("\n s \n");
+    for (int i = 1; i < n; i++)
+    {
+        for (int j = i+1; j < n; j++)
+        {
+            printf("%d ", s[i][j]);
+        }
+        printf("\n");
+    }
+    
 }
 
 int main(){
