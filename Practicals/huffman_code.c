@@ -15,7 +15,7 @@ typedef struct huffman_node huffman_node;
 
 int left = -1;
 int right = -1;
-huffman_node priority_queue[256];
+huffman_node * priority_queue[256];
 
 void swap(huffman_node *a, huffman_node *b ){
     huffman_node temp = *a;
@@ -38,30 +38,30 @@ int huffman_node_height(huffman_node *node)
     return height;
 }
 
-void heapify(huffman_node *arr, int n, int i) 
+void heapify(huffman_node *arr[], int n, int i) 
 { 
     int largest = i; // Initialize largest as root 
     int l = 2*i + 1; // left = 2*i + 1 
     int r = 2*i + 2; // right = 2*i + 2 
   
     // If left child has higher frequency than largest 
-    if (l < n && arr[left + l].frequency > arr[left + largest].frequency) 
+    if (l < n && arr[left + l]->frequency > arr[left + largest]->frequency) 
         largest = l; 
   
     // If right child has higher frequency than largest so far 
-    if (r < n && arr[left + r].frequency >  arr[left + largest].frequency) 
+    if (r < n && arr[left + r]->frequency >  arr[left + largest]->frequency) 
         largest = r; 
   
     // If small is not root 
     if (largest !=  i) 
     { 
-        swap(&arr[left + i], &arr[left + largest]); 
+        swap(arr[left + i], arr[left + largest]); 
         heapify(arr, n, largest);
     } 
 } 
   
 // main function to do heap sort 
-void heapSort(huffman_node *arr, int n) 
+void heapSort(huffman_node * arr[], int n) 
 { 
     // Build heap (rearrange array) 
     for (int i = n / 2 - 1; i >= 0; i--) 
@@ -70,7 +70,7 @@ void heapSort(huffman_node *arr, int n)
     // One by one extract an element from heap 
     for (int i=n-1; i>0; i--) 
     {         
-        swap(&arr[left], &arr[left + i]);
+        swap(arr[left], arr[left + i]);
         heapify(arr, i, 0); 
     } 
 }
@@ -78,25 +78,32 @@ void heapSort(huffman_node *arr, int n)
 void insert_node(int frequency, char character, huffman_node * left_node, huffman_node * right_node){
 
     if(left == -1 && right == -1){
-        huffman_node temp = {frequency, character, left_node, right_node};
+        huffman_node * temp = malloc(sizeof(huffman_node *));
+        temp->frequency = frequency;
+        temp->character = character;
+        temp->left = left_node;
+        temp->right = right_node;
         priority_queue[0] = temp;
         left++;
         right++;
         return;
     }
     
-    huffman_node temp = {frequency, character, left_node, right_node};
+    huffman_node * temp = malloc(sizeof(huffman_node *));
+    temp->frequency = frequency;
+    temp->character = character;
+    temp->left = left_node;
+    temp->right = right_node;
     priority_queue[++right] = temp;
 }
 
-huffman_node get_min(){
+huffman_node * get_min(){
     heapSort(priority_queue, right - left + 1);
 
     while (left <= right){
-        huffman_node temp = priority_queue[left];
+        huffman_node* temp = priority_queue[left];
         left ++;
-        return temp;
-        
+        return temp;        
     }
 }
 
@@ -110,18 +117,18 @@ void print(char letter, const unsigned int *arr, size_t len)
     putchar('\n');
 }
 
-void huffman_node_encodings(huffman_node node, int *arr, int pos)
+void huffman_node_encodings(huffman_node * node, int *arr, int pos)
 {
-    if (node.left) {
+    if (node->left) {
         arr[pos] = 0;
-        huffman_node_encodings(*node.left, arr, pos + 1);
+        huffman_node_encodings(node->left, arr, pos + 1);
     }
-    if (node.right) {
+    if (node->right) {
         arr[pos] = 1;
-        huffman_node_encodings(*node.right, arr, pos + 1);
+        huffman_node_encodings(node->right, arr, pos + 1);
     }
-    if (!(node.left || node.right)) {
-        print(node.frequency, arr, pos);
+    if (!(node->left || node->right)) {
+        print(node->character, arr, pos);
     }
 }
 
@@ -133,16 +140,18 @@ void huffman_coding(char *letters, int *frequencies, int size){
 
     while (right - left + 1 != 1)
     {
-        huffman_node left_node = get_min();
-        huffman_node right_node = get_min();
-        insert_node(left_node.frequency + right_node.frequency, '$', &left_node, &left_node);
+        huffman_node * left_node = get_min();
+        // printf("%c",left_node->character);
+        huffman_node * right_node = get_min();
+        // printf("%c",right_node->character);
+        insert_node(left_node->frequency + right_node->frequency, '$', left_node, right_node);
     }
 
-    huffman_node top = get_min();
+    huffman_node * top = get_min();
 
     int *arr;
-    arr = malloc(huffman_node_height(&top) * sizeof(unsigned int));
-    huffman_node_encodings(top, arr, 0);    
+    arr = malloc(huffman_node_height(top) * sizeof(unsigned int));
+    huffman_node_encodings(top, arr, 0);
 }
 
 int main(){
