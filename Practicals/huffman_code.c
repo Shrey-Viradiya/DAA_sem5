@@ -107,7 +107,7 @@ huffman_node * get_min(){
     }
 }
 
-void print(char letter, const unsigned int *arr, size_t len)
+void print(char letter, int *arr, size_t len)
 {
     unsigned int i;
     printf("%c: ", letter);
@@ -156,11 +156,23 @@ void huffman_coding(char *letters, int *frequencies, int size){
 
 int main(){
 
+    int size;
     printf("Huffman Coding\n");
-    char letters[] = {'a', 'b', 'c', 'd', 'e', 'f'};
-    int frequencies[] = {35, 8, 4, 23, 10, 2};
-    int size = 6;
+    printf("Enter the number of characters: ");
+    scanf("%d", &size);
+    
+    char letters[256];
+    int frequencies[256];
 
+    printf("Start Entering Characters String\n");
+    scanf("%s", letters);
+
+    printf("Start Entering Frequencies\n");
+    for (int i = 0; i < size; i++)
+    {       
+        scanf("%d", &frequencies[i]);
+    }
+    printf("-----------ANS-----------\n");
     huffman_coding(letters, frequencies, size);
     return 0;
 }
