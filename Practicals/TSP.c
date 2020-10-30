@@ -38,7 +38,7 @@ int TSP(int city, int no_of_cities, int *visited_cities, int **cost_matrix)
     return nearest_city;
 }
 
-void minimum_cost(int city, int no_of_cities, int *visited_cities, int **cost_matrix)
+void minimum_cost(int city, int no_of_cities, int *visited_cities, int **cost_matrix, int starting_city)
 {
     int nearest_city;
     visited_cities[city] = 1;
@@ -50,14 +50,14 @@ void minimum_cost(int city, int no_of_cities, int *visited_cities, int **cost_ma
     nearest_city = TSP(city, no_of_cities, visited_cities, cost_matrix);
     if(nearest_city == INT_MAX)
     {
-        nearest_city = 0;
+        nearest_city = starting_city;
         printf("%d", nearest_city + 1);
         cost = cost + cost_matrix[city][nearest_city];
         return;
     }
 
     // recursive call to function from new nearest city
-    minimum_cost(nearest_city, no_of_cities, visited_cities, cost_matrix);
+    minimum_cost(nearest_city, no_of_cities, visited_cities, cost_matrix, starting_city);
 }
 
 int main(){
@@ -87,10 +87,13 @@ int main(){
     int *visited_cities = calloc(no_of_cities, sizeof(int));
 
     int starting_city = 0;
-
+    printf("Enter the Starting City: \n");
+    scanf("%d", &starting_city);
+    starting_city--;
+    
     // Output
     printf("\nTravelling Path is: \n");
-    minimum_cost(starting_city, no_of_cities, visited_cities, cost_matrix);
+    minimum_cost(starting_city, no_of_cities, visited_cities, cost_matrix, starting_city);
     printf("\nTravelling Cost is: %d\n", cost);
 
     return 0;
